@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="main container-fluid">
+    <div class="card main-card text-center">
+        <div class="card-body">
+
+        <!--redirect to wardtyp, if modus is dependent, otherwise to pure los-->
+        <form action="{% url 'rooms' %}" method="post">
+
+            {% csrf_token %}
+            <h4 class="card-title mt-3">Please choose a template for the parameter settings</h4>
+    
+            <div class="row mt-3">
+                <div class="col-12 col-md-6 offset-md-3 col-lg-4 offset-lg-4">
+
+
+                    <!-- Dropdown: Select Template -->
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Select Template
+                        </button>
+                        <ul class="dropdown-menu">
+                            {% for template_name,values in templates.items %}
+                            <li><a class="dropdown-item" href="?selected={{template_name}}">{{template_name}}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+
+                    <!-- Where to save the template -->
+                    <h5 class="mt-3 mb-0">Save Template</h5>
+                    <small class="text-muted mt-0">How should be the new template be named?</small>
+                    <div class="input-group mt-1 mb-5">
+                        <!-- <div class="input-group-text">
+                            <input class="form-check-input mt-0" type="checkbox" value="True" name="bed-1-use" checked aria-label="Checkbox for following text input">
+                        </div> -->
+                        <span class="input-group-text" id="template-name-input-span">Name</span>
+                        <input id="template-name-input" type="text" class="form-control text-center" name="template-name-input" value="{{name}}", maxlength="30" aria-describedby="template-name-input-span">
+                    </div>
+
+
+                    <!-- choose time horizon -->
+                    <h5 class="mb-0 mt-2">Time Horizon</h5>
+                    <small class="text-muted mt-0">How long should be the inspected period of time?</small>
+                    <div class="input-group mt-1 mb-3">
+                        <!-- <span class="input-group-text" id="clip_los_min_span">Amount</span> -->
+                        <input id="time-horizon-input" type="number" class="form-control text-center" name="time-horizon-input" value="{{request.session.0.time_horizon}}", min="1" max="365" step="1", aria-describedby="">
+                    </div>
+
+                    <!-- select the target load factor -->
+                    <h5 class="mb-0">Load factor</h5>
+                    <small class="text-muted mt-0">How high should the utilization be?</small>
+                    <input type="range" class="form-range" name="range-load-factor" min="0.01" max="1" step="0.01" value="{{request.session.0.load_factor}}" id="range-load-factor" oninput="updateTextInput(this.value);">
+                    <div class="input-group mt-1 mb-3 ">
+                        <input id="load-factor" type="number" class="form-control text-center" min="0.01" max="1" step="0.01" name="load-factor" value="{{request.session.0.load_factor}}", aria-describedby="load-factor-span" oninput="updateRangeSlider(this.value);">
+                    </div>
+
+
+                    <!-- Ensure feasibility w.r.t. gender separation -->
+                    <h5 class="mb-0">Feasibility</h5>
+                    <small class="text-muted mt-0">Should feasibility w.r.t. gender separation be ensured?</small>
+                    <div class="input-group mt-1 mb-3">
+                        <div class="form-check form-check-inline">
+                            <input
+                                {% if request.session.0.feasible %} checked {% endif %} 
+                                class="form-check-input" type="radio" name="feasibility-input" id="feasibility-input-true"
+                                value="yes"
+                            >
+                            <label class="form-check-label" for="feasibility-input-true">Yes</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input 
+                                {% if request.session.0.feasible == False %} checked {% endif %}
+                                class="form-check-input" type="radio" name="feasibility-input" id="feasibility-input-false" 
+                                value="no"
+                            >
+                            <label class="form-check-label" for="feasibility-input-false">No</label>
+                        </div>
+                    </div>
+
+
+                    <!--Here can the two branches for los generation be chosen (los,age (in)dependent)-->
+                    <h5 class="mt-0 mb-0">LOS Modus</h5>
+                    <small class="text-muted mt-0">Should the los and age be generated independently?</small>
+                    <div class="input-group mt-2 mb-3">
+                        <div class="form-check form-check-inline">
+                            <input
+                                {% if request.session.0.los.modus == 'independent' %} checked {% endif %} 
+                                class="form-check-input" type="radio" name="losmode-independent-input" id="losmode-independent-input-true"
+                                value="yes"
+                            >
+                            <label class="form-check-label" for="losmode-independent-input-true">Yes</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input 
+                                {% if request.session.0.los.modus == 'dependent' %} checked {% endif %}
+                                class="form-check-input" type="radio" name="losmode-independent-input" id="losmode-independent-input-false" 
+                                value="no"
+                            >
+                            <label class="form-check-label" for="losmode-independent-input-false">No</label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            
+            <p class="card-text mt-4">The template will be automatically saved at every step.</p>
+            <div>
+                <input type="submit" value="Next" class="btn btn-primary btn-lg">
+            </div>
+
+        </form>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+{% endblock %}

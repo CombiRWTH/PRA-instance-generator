@@ -1,0 +1,18 @@
+[
+    {
+        "name": "High Peak",
+        "short_name": "high_peak"
+    },
+    {
+        "name": "Wide Peak",
+        "short_name": "wide_peak"
+    },
+    {
+        "name": "Two Step Peak",
+        "short_name": "2step_peak"
+    },
+    {
+        "name": "Three Step Peak",
+        "short_name": "3step_peak"
+    }
+]

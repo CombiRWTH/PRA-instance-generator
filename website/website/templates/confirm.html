@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+
+<div class="container-fluid main">
+
+    <div class="card main-card text-center">
+        <div class="card-body">
+    
+            <form action="{% url 'generate' %}" method="post">
+                {% csrf_token %}
+                <h4 class="card-title mt-3 mb-0">Confirm the generation by filling out last information</h4>
+        
+    
+                <p class="card-text mt-0 text-muted">
+                    <!-- There are three allowed combinations. <br>
+                    If at least one room with a single bed is used, the amount of rooms with two beds are arbitrary. <br>
+                    But when no room with a single bed exists -->
+                    You have to adjust the load factor and how many instances you wish.<br>
+                </p>
+
+                <!-- <div class="center-block"> -->
+                <div class="row mt-5">
+                    <div class="col-12 col-md-6 offset-md-3 col-lg-4 offset-lg-4">
+
+
+                        <h5 class="mb-0">Amount</h5>
+                        <small class="text-muted mt-0">How many instances do you need of these settings?</small>
+                        <div class="input-group mt-1 mb-3">
+                            <!-- <span class="input-group-text" id="clip_los_min_span">Amount</span> -->
+                            <input id="amount-input" type="number" class="form-control text-center" name="amount-input" value="{{request.session.0.amount}}", min="1" max="50" step="1", aria-describedby="">
+                        </div>
+
+                        <h5 class="mb-0">Save</h5>
+                        <small class="text-muted mt-0">Where do you want to store the files?</small>
+                        <div class="input-group mt-1 mb-3 ">
+                            <!-- <div class="input-group-text">
+                                <input class="form-check-input mt-0" type="checkbox" value="True" name="bed-1-use" checked aria-label="Checkbox for following text input">
+                            </div> -->
+                            <span class="input-group-text" id="path-input-span">Path</span>
+                            <input id="path-input" type="text" class="form-control text-center" name="path-input" value="{{request.session.0.path}}", aria-describedby="path-input-span">
+                        </div>
+    
+
+                    </div>
+                </div>
+        
+                <div class="mt-3">
+                    <a href="{% url 'rateparams' %}" class="btn btn-secondary btn-lg">Back</a>
+                    <input type="submit" value="Generate" class="btn btn-primary btn-lg">
+                </div>
+                
+            </form>
+    
+        </div>
+    </div>
+</div>
+
+
+<!-- <footer class="footer mt-auto py-3 bg-light">
+    <div class="container-fluid text-center">
+        <div class="input-group">
+            <a href="{% url 'wardtyp' %}"   role="button" class="btn btn-outline-dark">Ward Typ</a>
+            <a href="{% url 'lor' %}"       role="button" class="btn btn-outline-dark">LOR</a>
+            <a href="{% url 'rateparams' %}"role="button" class="btn btn-outline-dark">Rate Params</a>
+            <a href="{% url 'rooms' %}"     role="button" class="btn btn-outline-dark">Beds</a>
+            <a href="{% url 'confirm' %}"   role="button" class="btn btn-dark">Confirm</a>
+        </div>
+    </div>
+</footer> -->
+
+
+
+
+
+{% endblock %}

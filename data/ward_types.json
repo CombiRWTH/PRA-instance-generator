@@ -1,0 +1,22 @@
+[
+    {
+        "name": "Triangle Shape",
+        "short_name": "triangle"
+    },
+    {
+        "name": "Middle Duration",
+        "short_name": "midduration"
+    },
+    {
+        "name": "Old but short Duration",
+        "short_name": "shortold"
+    },
+    {
+        "name": "Just short Duration",
+        "short_name": "short"
+    },
+    {
+        "name": "Outlier",
+        "short_name": "outlier"
+    }
+]

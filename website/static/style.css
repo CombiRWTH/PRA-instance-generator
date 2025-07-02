@@ -1,0 +1,113 @@
+body {
+	background:  #ececec;
+  height: 100%;
+  width: 100%;
+}
+.limited {
+    max-height: 50px;
+}
+
+.scroll {
+    overflow-x: scroll;
+	scrollbar-color: #566573 #e5e8e8;
+}
+
+table, th, td {
+  border: 1px solid black;
+  padding: 5px;
+}
+
+table caption {
+  caption-side: top;
+  background-color: #6c3483;
+  color: #fff;
+  padding: 5px;
+}
+
+/*--- navigation bar ---*/
+.navbar {
+  /* background: #ffffff; */
+}
+.nav-link,
+.navbar-brand {
+  color: #000;
+  cursor: pointer;
+}
+.nav-link {
+  margin-right: 1em !important;
+}
+.nav-link:hover {
+  color: #000;
+}
+.navbar-collapse {
+  justify-content: flex-end;
+}
+
+.main {
+  /* align-content: center; */
+  /* margin: auto;  */
+  padding: 0;
+  /* margin-left: 4rem; */
+  /* padding-right: 2rem; */
+  width: 100%;
+}
+
+
+.main-card {
+  /* align-content: center; */
+  margin: auto;
+  width: 80%;
+  margin-top: 5vh;
+  height: auto;
+  margin-bottom: 5vh;
+}
+
+.card-title {
+  /* margin-bottom: 2vh; */
+}
+
+/* .number-input {
+  width: 2rem;
+  display: inline;
+} */
+
+/* .input-group>.input-group-prepend {
+  flex: 0 0 30%;
+}
+.input-group .input-group-text {
+  width: 100%;
+} */
+
+.input-group>input.number-input {flex: 0 1 1000px;}
+
+.center-block {
+  display: table;  /* Instead of display:block */
+  margin: 0;
+  padding: 0;
+}
+
+.input-group {
+  justify-content: center;
+}
+
+/* .col-centered{
+  margin: 0 auto;
+  float: none;
+} */
+
+/* .center-block {
+  display: table; 
+  margin-left: auto;
+  margin-right: auto;
+} */
+
+/* .abs-container {
+  position: absolute;
+  width: 100%;
+  padding-right: 30px;
+} */
+
+/* .card {
+  margin: 0 auto;
+  float: none; 
+}  */

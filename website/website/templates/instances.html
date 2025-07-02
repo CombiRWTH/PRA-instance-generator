@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+
+<div class="container-fluid main">
+
+    <div class="card main-card text-center">
+        <div class="card-body">
+
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                  <button class="nav-link {%if show_home %} active {% endif %}" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="false">Home</button>
+                  {% for name,data in all_stats.items%}
+                    <button class="nav-link {%if data.1 %} active {% endif %}" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-{{name}}" type="button" role="tab" aria-controls="nav-{{name}}" aria-selected="{{data.1}}">{{name}}</button>
+                  {% endfor %}
+                </div>
+              </nav>
+              <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade {%if show_home %} show active {% endif %}" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                    <h4 class="card-title mt-3 mb-2">Click on a tab to open statics about the generated instances.</h4>
+                    <small class="mt-0 mb-0 text-muted"> The default folder is instances/ </small>
+                </div>
+                {% for name,data in all_stats.items %}
+                    <div class="tab-pane fade {%if data.1 %} show active {% endif %}" id="nav-{{name}}" role="tabpanel" aria-labelledby="nav-{{name}}-tab">
+                        <div class="row mt-4">
+
+                            {% for k,v in data.0.items %}
+                                <div class="col-xl-4 col-md-6 col-12 mb-2">
+                                    <div class="card text-start">
+                                        <div class="card-body">
+                                            <h4 class="card-title mt-0 mb-0 text-center"> {{v.name}} </h4>
+                                            <h6 class="mt-2">
+                                                Load
+                                                <span class="badge bg-secondary me-2">{{v.load_factor.actually}}</span>
+                                                Patients 
+                                                <span class="badge bg-secondary me-2">{{v.amount}}</span>
+                                                Time Horizon 
+                                                <span class="badge bg-secondary me-2">{{v.time_horizon}}</span>
+                                                LOR Mode 
+                                                <span class="badge bg-secondary">{{v.lor_mode}}</span>
+                                            </h6>
+                                            <h6 class="mt-2">
+                                                LOS
+                                                <span class="badge bg-secondary me-2">min {{v.los.min}}</span>
+                                                <span class="badge bg-secondary me-2">avg {{v.los.avg}}</span>
+                                                <span class="badge bg-secondary">max {{v.los.max}}</span>
+                                            </h6>
+                                            <h6 class="mt-2">
+                                                Age
+                                                <span class="badge bg-secondary me-2">min {{v.age.min}}</span>
+                                                <span class="badge bg-secondary me-2">avg {{v.age.avg}}</span>
+                                                <span class="badge bg-secondary">max {{v.age.max}}</span>
+                                            </h6>
+                                            <h6 class="mt-2">
+                                                Rooms
+                                                <span class="badge bg-secondary me-2">Modus {{v.rooms.mode}}</span>
+                                                {% if v.rooms.mode == "duo" %}
+                                                    Room Type 1
+                                                    <span class="badge bg-secondary me-0">{{v.rooms.duo.0.num}}x</span>
+                                                    <span class="badge bg-secondary me-2">{{v.rooms.duo.0.size}}</span>
+                                                    Room Type 2
+                                                    <span class="badge bg-secondary me-0">{{v.rooms.duo.1.num}}x</span>
+                                                    <span class="badge bg-secondary me-2">{{v.rooms.duo.1.size}}</span>
+                                                 {% else %}
+                                                    <span class="badge bg-secondary me-2">{% if v.rooms.superincreasing %} superincreasing {% else %} non-superincreasing {% endif %}</span>
+                                                    <span class="badge bg-secondary me-0">$a = {{v.rooms.seq.0.size}}$</span>
+                                                    {% for room in v.rooms.seq %}
+                                                        <span class="badge bg-secondary">{{room.num}}</span>
+                                                    {% endfor %}
+                                                 {% endif %}
+                                                <span class="badge bg-secondary"> Total {{v.rooms.total}}</span>
+                                            </h6>
+                                            
+                                            <div class="mt-4">
+                                                <!-- <h4 class="mb-0">Plot</h4> -->
+                                                {% if v.plot %}
+                                                    <img src="data:image/png;base64,{{ v.plot }}" alt="Matplotlib Graph" class="blog-image" width="80%">
+                                                {% else %}
+                                                    <p class="card-text mt-2 mb-3">No plot was generated due to an error.</p>
+                                                {% endif %}
+                                            </div>
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                {% endfor %}
+              </div>
+            
+    
+
+            <!-- <h4 class="card-title mt-3 mb-0">Please confirm the generation by filling out last information</h4>
+    
+            <p class="card-text mt-0 text-muted">
+                You have to adjust the load factor and how many instances you wish.<br>
+            </p> -->
+
+        
+    
+        </div>
+    </div>
+</div>
+
+
+<!-- <footer class="footer mt-auto py-3 bg-light">
+    <div class="container-fluid text-center">
+        <div class="input-group">
+            <a href="{% url 'wardtyp' %}"   role="button" class="btn btn-outline-dark">Ward Typ</a>
+            <a href="{% url 'lor' %}"       role="button" class="btn btn-outline-dark">LOR</a>
+            <a href="{% url 'rateparams' %}"role="button" class="btn btn-outline-dark">Rate Params</a>
+            <a href="{% url 'rooms' %}"     role="button" class="btn btn-outline-dark">Beds</a>
+            <a href="{% url 'confirm' %}"   role="button" class="btn btn-dark">Confirm</a>
+        </div>
+    </div>
+</footer> -->
+
+
+
+
+
+{% endblock %}

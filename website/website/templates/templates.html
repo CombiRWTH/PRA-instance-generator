@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+
+<div class="container-fluid main">
+    <div class="card main-card text-center">
+        <div class="card-body">
+
+
+            <div class="row mt-4">
+                {% for name,data in templates.items %}
+
+                    <div class="col-xl-4 col-md-6 col-12 mb-2">
+                        <div class="card text-start pt-0">
+                            <div class="card-body mt-0">
+
+                                <!-- Single Instance Information starts here (within a card) -->
+                                <h4 class="card-title mt-0 mb-2 pb-2 text-center"> {{name}} 
+                                    
+                                    <!-- Delete icon -->
+                                    <a href="{% if name != 'Default' %} {% url 'delete' %}?name={{name}} {% else %} # {%endif%}" role="button" class="float-end">
+                                        <button type="button" class="btn btn-secondary btn-lg" {% if name == "Default" %} disabled {%endif%}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                                                <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
+                                            </svg>
+                                        </button>
+                                    </a>
+                                </h4>
+                                
+                                <!-- Border between title and content -->
+                                <div class="border border-secondary"></div>
+
+                                <!-- Content of Template starts here -->
+                                <h6 class="mt-2">
+                                    Load
+                                    <span class="badge bg-secondary me-2">{{data.load_factor}}</span>
+                                    Time Horizon
+                                    <span class="badge bg-secondary me-2">{{data.time_horizon}}</span>
+                                    Amount
+                                    <span class="badge bg-secondary me-2">{{data.amount}}</span>
+                                </h6>
+                                <h6>
+                                    LOS Mode
+                                    <span class="badge bg-secondary">{{data.los.schema}}</span>
+                                    LOR Mode 
+                                    <span class="badge bg-secondary">{{data.lor.mode}}</span>
+                                </h6>
+                                <h6 class="mt-2">
+                                    LOS
+                                    <span class="badge bg-secondary me-2">min {{data.clip.los.min}}</span>
+                                    <span class="badge bg-secondary">max {{data.clip.los.max}}</span>
+                                </h6>
+                                <h6 class="mt-2">
+                                    LOR
+                                    <span class="badge bg-secondary me-2">min {{data.clip.lor.min}}</span>
+                                    <span class="badge bg-secondary">max {{data.clip.lor.max}}</span>
+                                </h6>
+                                <h6 class="mt-2">
+                                    Age
+                                    <span class="badge bg-secondary me-2">min {{data.clip.age.min}}</span>
+                                    <span class="badge bg-secondary">max {{data.clip.age.max}}</span>
+                                </h6>
+                                <h6 class="mt-2">
+                                    Rooms
+                                    <span class="badge bg-secondary me-2">Modus {{data.rooms.mode}}</span>
+                                    {% if data.rooms.mode == "duo" %}
+                                        Room Type 1
+                                        <span class="badge bg-secondary me-0">{{data.rooms.duo.0.num}}x</span>
+                                        <span class="badge bg-secondary me-2">{{data.rooms.duo.0.size}}</span>
+                                        Room Type 2
+                                        <span class="badge bg-secondary me-0">{{data.rooms.duo.1.num}}x</span>
+                                        <span class="badge bg-secondary me-2">{{data.rooms.duo.1.size}}</span>
+                                     {% else %}
+                                        <span class="badge bg-secondary me-2">{% if data.rooms.superincreasing %} superincreasing {% else %} non-superincreasing {% endif %}</span>
+                                        <span class="badge bg-secondary me-0">$a = {{data.rooms.seq.0.size}}$</span>
+                                        {% for room in data.rooms.seq %}
+                                            <span class="badge bg-secondary">{{room.num}}</span>
+                                        {% endfor %}
+                                     {% endif %}
+                                    <span class="badge bg-secondary"> Total {{data.rooms.total}}</span>
+                                </h6>
+
+
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            
+    
+
+            <!-- <h4 class="card-title mt-3 mb-0">Please confirm the generation by filling out last information</h4>
+    
+            <p class="card-text mt-0 text-muted">
+                You have to adjust the load factor and how many instances you wish.<br>
+            </p> -->
+
+        
+    
+        </div>
+    </div>
+</div>
+
+
+<!-- <footer class="footer mt-auto py-3 bg-light">
+    <div class="container-fluid text-center">
+        <div class="input-group">
+            <a href="{% url 'wardtyp' %}"   role="button" class="btn btn-outline-dark">Ward Typ</a>
+            <a href="{% url 'lor' %}"       role="button" class="btn btn-outline-dark">LOR</a>
+            <a href="{% url 'rateparams' %}"role="button" class="btn btn-outline-dark">Rate Params</a>
+            <a href="{% url 'rooms' %}"     role="button" class="btn btn-outline-dark">Beds</a>
+            <a href="{% url 'confirm' %}"   role="button" class="btn btn-dark">Confirm</a>
+        </div>
+    </div>
+</footer> -->
+
+
+
+
+
+{% endblock %}

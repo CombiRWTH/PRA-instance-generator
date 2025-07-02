@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+
+<div class="container-fluid main">
+
+    <div class="card main-card text-center">
+        <div class="card-body">
+    
+            <form action="{% url 'abort' %}" method="post">
+                {% csrf_token %}
+                <h4 class="card-title mt-3 mb-0">Generation process in work</h4>
+        
+    
+                <p class="card-text mt-0 text-muted">
+                    <!-- There are three allowed combinations. <br>
+                    If at least one room with a single bed is used, the amount of rooms with two beds are arbitrary. <br>
+                    But when no room with a single bed exists -->
+                    Please wait until the generation process has finished or abort the job.<br>
+                </p>
+
+                <!-- <div class="center-block"> -->
+                <div class="row mt-2">
+                    <div class="col-12 col-md-6 offset-md-3 col-lg-4 offset-lg-4">
+
+                        <!--Progress bar-->
+                        <div class="progress" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                            <div id="loading-bar" class="progress-bar" style="width: 0%"></div>
+                        </div> 
+
+                    </div>
+                </div>
+        
+                <div class="mt-5">
+                    <!-- <a href="{% url 'confirm' %}" class="btn btn-danger btn-lg">Abort</a> -->
+                    <input type="submit" value="Abort" class="btn btn-danger btn-lg">
+                </div>
+                
+            </form>
+    
+        </div>
+    </div>
+</div>
+
+
+<!--Prompt on server for current progress value-->
+<script>
+
+const loadingBar = document.getElementById('loading-bar');
+loadingBar.style.width = "0%"; // reset progress value
+
+// pull the current value from the server
+async function pullValue() {
+    response = await fetch("{% url 'progress' %}", {
+        // fetch("{% url 'progress' %}", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": "{{ csrf_token }}"
+        }
+    })
+    data = await response.json()
+    return data //returns "progress":value
+}
+
+// update the progress bar (frontend)
+function updateBar(newValue) {
+    loadingBar.style.width = newValue + "%";
+}
+
+// manually sleep function (could also be done via setTimeout, but this way I have more control over the process)
+async function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function run() {
+    console.log("START")
+    let value = 0;
+    // while 100% is not reached, pull again
+    while (value < 100) {
+        // wait for next request
+        await sleep(1000);
+        //read out value from server
+        data = await pullValue();
+        value = data.progress*100;
+        // update the progress bar
+        updateBar(value);
+    }
+    // when 100% is reached, redirect to the next page
+    await sleep(700) //better animation
+    //Open view in new tab
+    window.open("{% url 'instances' %}" + "?tab={{request.session.0.name}}", "_blank")//.focus();
+    window.location.href = "{% url 'confirm' %}" + "?finished=true";
+}
+
+
+</script>
+
+
+<!-- <footer class="footer mt-auto py-3 bg-light">
+    <div class="container-fluid text-center">
+        <div class="input-group">
+            <a href="{% url 'wardtyp' %}"   role="button" class="btn btn-outline-dark">Ward Typ</a>
+            <a href="{% url 'lor' %}"       role="button" class="btn btn-outline-dark">LOR</a>
+            <a href="{% url 'rateparams' %}"role="button" class="btn btn-outline-dark">Rate Params</a>
+            <a href="{% url 'rooms' %}"     role="button" class="btn btn-outline-dark">Beds</a>
+            <a href="{% url 'confirm' %}"   role="button" class="btn btn-dark">Confirm</a>
+        </div>
+    </div>
+</footer> -->
+
+
+
+
+
+{% endblock %}

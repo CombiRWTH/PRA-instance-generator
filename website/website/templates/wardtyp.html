@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container-fluid main">
+  <div class="card main-card text-center">
+    <div class="card-body">
+
+        <form action="{% url 'lor' %}" method="post">
+            {% csrf_token %}
+            <h4 class="card-title mt-3 mb-0">Length of Stay (LOS) Distribution</h4>
+            <small class="mt-0 text-muted">
+                You can choose a piecewise Lognormal distribution depending on the age. Therefore select one of the schemas ploted below.<br>
+                Otherwise you can use a fixed Lognormal distribution for the LOS which will not consider the age of the patient.
+            </small>
+
+            <!-- Clip the values -->
+            <div class="row mt-2 mb-4">
+                <div class="mt-4 col-12 col-md-6 offset-md-3 col-lg-4 offset-lg-4">
+                    <h5 class="mb-0">Clip the Age Values</h5>
+                    <small class="text-muted mb-1">You can clip the age values here</small>
+                    <div class="mt-2 mb-3 input-group">
+                        <span class="input-group-text" id="clip_age_min_span">min</span>
+                        <input id="clip_age_min" type="number" class="form-control text-center" name="clip_age_min" value="{{request.session.0.clip.age.min}}", min="18" aria-describedby="clip_age_min_span">
+                        <span class="input-group-text ms-3" id="clip_age_max_span">max</span>
+                        <input id="clip_age_max" type="number" class="form-control text-center" name="clip_age_max" value="{{request.session.0.clip.age.max}}", aria-describedby="clip_age_max_span">
+                    </div>
+                    <h5 class="mt-4 mb-0">Clip the LOS Values</h5>
+                    <small class="text-muted mb-1">You can clip the los values (in days) here.</small>
+                    <div class="mt-2 mb-3 input-group">
+                        <span class="input-group-text" id="clip_los_min_span">min</span>
+                        <input id="clip_los_min" type="number" class="form-control text-center" name="clip_los_min" value="{{request.session.0.clip.los.min}}", min="0", aria-describedby="clip_los_min_span">
+                        <span class="input-group-text ms-3" id="clip_los_max_span">max</span>
+                        <input id="clip_los_max" type="number" class="form-control text-center" name="clip_los_max" value="{{request.session.0.clip.los.max}}", aria-describedby="clip_los_max_span">
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border border-secondary border-1 opacity-25" style="margin:1rem auto; display:block;" width="80%">
+      
+            <div class="dropdown mt-5">
+              <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {% if request.session.0.los.schema %} {{current}} {% else %} Select WardTyp {% endif %}
+              </button>
+              <ul class="dropdown-menu">
+                {% for wardtyp in wardtypes %}
+                    <li><a class="dropdown-item" href="?selected={{wardtyp.short_name}}">{{wardtyp.name}}</a></li>
+                {% endfor %}
+              </ul>
+            </div>
+            
+            <!--show all the plots of different ward types-->
+            {% load static %}
+            <div class="row mt-5">
+                {% for wardtyp in wardtypes %}
+                <div class="col-12 col-md-6 col-lg-4">
+                    <h5 class="mb-0 mt-4">{{wardtyp.name}}</h5>
+                    <!--in case the wardtyp is selected, create a border on the outside of the plot-->
+                    {% if wardtyp.name == current %}
+                        <div class="border border-primary border-3 p-0">
+                            <img src="{% static 'preview-los/' %}{{wardtyp.short_name}}.png" class="img-fluid" alt="ERROR for {{wardtyp.short_name}}">
+                        </div>
+                    <!--if not selected, no border-->
+                    {% else %}
+                            <img src="{% static 'preview-los/' %}{{wardtyp.short_name}}.png" class="img-fluid" alt="ERROR for {{wardtyp.short_name}}">
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+
+      
+              
+            <div class="mt-5">
+                <a href="{% url 'rooms' %}" class="btn btn-secondary btn-lg">Back</a>
+                <input type="submit" value="Next" class="btn btn-primary btn-lg">
+            </div>
+            
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+{% endblock %}

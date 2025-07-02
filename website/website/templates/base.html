@@ -1,0 +1,82 @@
+<html>
+    <head>
+        <title>Instance-Generator</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> 
+        <!-- <script src="https://code.jquery.com/jquery-3.7.1.slim.js" integrity="sha256-UgvvN8vBkgO0luPSUl2s8TIlOSYRoGFAX4jlCIm9Adc=" crossorigin="anonymous"></script> -->
+
+        <!-- Load Tex via MathJax-->
+        <script type="text/x-mathjax-config">
+          MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+        </script>
+        <script type="text/javascript"
+          src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+        </script>
+
+        {% load static %}
+         <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+        <script src="{% static 'radiotoggle.js' %}"></script>
+        <script src="{% static 'updateSlider.js' %}"></script>
+        <script src="{% static 'roomsValidate.js' %}"></script>
+        <script src="{% static 'paramsValidate.js' %}"></script>
+
+    </head>
+    <body class="d-flex flex-column h-100">
+      <!--Header-->
+        <div class="d-flex page-header bg-light fixed-top">
+          <nav class="d-flex navbar navbar-expand-lg navbar-light w-100">
+            <!--Title-->
+            <a class="navbar-brand ps-3" href="{% url 'index' %}">Instance-Generator</a>
+            <!--Navigation-->
+            <div>
+              <a href="{% url 'start' %}" role="button" class="btn btn-primary btn-md btn-block ps-5 pe-5">Start</a>
+                <!-- <button type="button" class="btn btn-primary btn-md btn-block ps-5 pe-5">Start</button> -->
+              <a href="{% url 'templates' %}" role="button" class="btn btn-primary btn-md btn-block ps-5 pe-5">Templates</a>
+              <a href="{% url 'instances' %}" role="button" class="btn btn-primary btn-md btn-block ps-5 pe-5">Instances</a>
+            </div>
+            <!--Info text-->
+            {% if request.session.0 != None %}
+              <button type="button" class="btn btn-secondary btn-md btn-block ps-5 pe-5 ms-1" disabled>{{request.session.0.name}}</button>
+            {% endif %}
+          </nav>
+        </div>
+
+        <!--Messages-->
+        {% if request.session.messages %}
+          <div class="container-fluid mt-5 pt-5 mb-0 w-50">
+            {% for message in request.session.messages %}
+              <div class="alert alert-{{ message.type }} alert-dismissible fade show" role="alert">
+                {{ message.txt }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <!--Main Content-->
+          {% block content %}
+          {% endblock %}
+        
+        <!--Footer-->
+        {% if request.path in "'/wardtyp/','/los/','/age/','/lor/','/rateparams/','/rooms/','/confirm/'" and request.path != '/'%}
+        <footer class="footer py-3 bg-light fixed-bottom">
+          <div class="container-fluid text-center">
+              <div class="input-group"> <!--dependent modus -->
+                  <a href="{% url 'rooms' %}"     role="button" class="btn btn-{% if request.path != '/rooms/' %}outline-{% endif %}dark">Beds</a>
+                {%if request.session.0.los.modus == 'dependent'%}
+                  <a href="{% url 'wardtyp' %}"   role="button" class="btn btn-{% if request.path != '/wardtyp/' %}outline-{% endif %}dark">Ward Typ</a>
+                {% else %} <!--independent modus -->
+                  <a href="{% url 'los' %}"   role="button" class="btn btn-{% if request.path != '/los/' %}outline-{% endif %}dark">LOS</a>
+                  <a href="{% url 'age' %}"   role="button" class="btn btn-{% if request.path != '/age/' %}outline-{% endif %}dark">Age</a>
+                {% endif %}
+                  <a href="{% url 'lor' %}"       role="button" class="btn btn-{% if request.path != '/lor/' %}outline-{% endif %}dark">LOR</a>
+                  <a href="{% url 'rateparams' %}"role="button" class="btn btn-{% if request.path != '/rateparams/' %}outline-{% endif %}dark">Rate Params</a>
+                  <a href="{% url 'confirm' %}"   role="button" class="btn btn-{% if request.path != '/confirm/' %}outline-{% endif %}dark">Confirm</a>
+              </div>
+          </div>
+      </footer>
+      {% endif %}
+
+
+    </body>
+</html>

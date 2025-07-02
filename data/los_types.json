@@ -1,0 +1,22 @@
+[
+    {
+        "name": "Flat Curve",
+        "short_name": "flat_curve"
+    },
+    {
+        "name": "Middle Curve",
+        "short_name": "middle_curve"
+    },
+    {
+        "name": "Higher Curve",
+        "short_name": "higher_curve"
+    },
+    {
+        "name": "Very High Curve",
+        "short_name": "veryhigh_curve"
+    },
+    {
+        "name": "Extreme Curve",
+        "short_name": "extreme_curve"
+    }
+]

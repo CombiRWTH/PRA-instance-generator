@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+
+<div class="container-fluid main">
+
+    <div class="card main-card text-center">
+        <div class="card-body">
+
+            <h4 class="card-title mt-3 mb-0">How many rooms per size should be used?</h4>
+            <p class="card-text mt-0 mb-4 text-muted">
+                You can mainly choose between the two options: Due Selection and Sequential <br>
+            </p>
+
+            <!-- Top menu option -->
+            <ul class="nav nav-pills mb-3 flex-column flex-sm-row w-100 justify-content-between" id="pills-tab" role="tablist">
+                <li class="nav-item flex-grow-1" role="presentation">
+                  <button class="nav-link active w-100" id="pills-duo-tab" data-bs-toggle="pill" data-bs-target="#pills-duo" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Duo Selection</button>
+                </li>
+                <li class="nav-item flex-grow-1" role="presentation">
+                  <button class="nav-link w-100" id="pills-seq-tab" data-bs-toggle="pill" data-bs-target="#pills-seq" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Sequential</button>
+                </li>
+            </ul>
+
+            <form action="{% url 'next-mode' %}" method="post">
+                {% csrf_token %}
+              <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-duo" role="tabpanel" aria-labelledby="pills-duo-tab">
+                    <!-- Option 1: Duo Selection -->
+                    <div class="alert alert-info mt-4" role="alert">
+                        You can choose rooms with two different bed amounts. <br>
+                        But the size $r_1$ of room type 1 must divide the size $r_2$ of room type 2. <br>
+                        Together they determine the minimal amount $n_1$ of rooms of type 1 by $n_1 = \frac{r_2}{r_1}-1$
+                    </div>
+
+                    <div class="row mt-5">
+                        <div class="col-12 col-md-6 offset-md-3">
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered text-center w-100">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Size</th>
+                                            <th>Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-start"><strong>Room Type 1</strong></td>
+                                            <td>
+                                                <input id="duo_bed_size_1" type="number" class="form-control text-center" name="duo_bed_size_1" value="{{request.session.0.rooms.duo.0.size}}" min="1" max="1000" step="1">
+                                            </td>
+                                            <td>
+                                                <input id="duo_bed_num_1" type="number" class="form-control text-center" name="duo_bed_num_1" value="{{request.session.0.rooms.duo.0.num}}" min="0" max="1000" step="1">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-start"><strong>Room Type 2</strong></td>
+                                            <td>
+                                                <input id="duo_bed_size_2" type="number" class="form-control text-center" name="duo_bed_size_2" value="{{request.session.0.rooms.duo.1.size}}" min="0" max="1000" step="1">
+                                            </td>
+                                            <td>
+                                                <input id="duo_bed_num_2" type="number" class="form-control text-center" name="duo_bed_num_2" value="{{request.session.0.rooms.duo.1.num}}" min="0" max="1000" step="1">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Pre-existing hidden error pane (room size)-->
+                            <div id="error-pane-divide" class="alert alert-danger mt-3 d-none" role="alert">
+                                The size $r_1$ of Room Type 1 must divide the size $r_2$ of Room Type 2.
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="pills-seq" role="tabpanel" aria-labelledby="pills-seq-tab">
+                    <!-- Option 2: Sequential -->
+                    <div class="alert alert-info mt-4" role="alert">
+                        The size of room 1 determines the sizes of all the other rooms. <br>
+                        Using the superincreasing option gives factors of powers of 2. <br>
+                        Otherwise, you can linear increasing sizes.
+                    </div>
+
+
+                    <div class="row mt-5">
+                        <div class="col-12 col-md-6 offset-md-3">
+
+                            <!-- Superincreasing switch -->
+                            <div class="form-check form-switch d-flex align-items-center justify-content-center mb-3" style="gap: 4rem;">
+                                <label class="form-check-label fs-5 fw-bold" for="room-superincreasing">Superincreasing</label>
+                                <input 
+                                    class="form-check-input form-check-input-lg"
+                                    type="checkbox" role="switch"
+                                    name="room_superincreasing" id="room-superincreasing"
+                                    style="transform: scale(1.5);"
+                                    {% if request.session.0.rooms.superincreasing %} checked {% endif %}>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered text-center w-100" id="rooms-table">
+                                    <colgroup>
+                                        <col style="width: 20%;"> <!-- First column -->
+                                        <col style="width: 40%;"> <!-- Second column -->
+                                        <col style="width: 40%;"> <!-- Third column -->
+                                    </colgroup>
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Size</th>
+                                            <th>Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for room in request.session.0.rooms.seq %}
+                                        <tr>
+                                            <td class="text-start"><strong>Room Type {{ forloop.counter }}</strong></td>
+                                            <td>
+                                                <input id="seq_bed_size_{{ forloop.counter }}"
+                                                        name="seq_bed_size_{{ forloop.counter }}"
+                                                        type="number"
+                                                        class="form-control text-center"
+                                                        value="{{ room.size }}" min="1" max="1000" step="1"
+                                                    {% if forloop.counter > 1 %} disabled {% endif %}>
+                                            </td>
+                                            <td>
+                                                <input id="seq_bed_num_{{ forloop.counter }}" type="number" class="form-control text-center" name="seq_bed_num_{{ forloop.counter }}" value="{{ room.num }}" min="1" max="1000" step="1">
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Add Button -->
+                            <div class="mt-0 mb-5 text-center">
+                                <button type="button" id="remove-room-btn" class="btn btn-danger btn-md remove-room-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-dash-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                        <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8"/>
+                                    </svg>
+                                </button>
+                                <button type="button" id="add-room-btn" class="btn btn-success btn-md">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                                    </svg>   
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+              </div>
+              
+              <!-- Hack to read out the active pill (assign value via JS) -->
+              <input type="hidden" id="current-room-mode" name="current_room_mode" value="{{request.session.0.rooms.mode}}">
+              <!-- Navigation buttons -->
+              <div class="mt-3">
+                <a href="{% url 'start' %}?selected={{request.session.0.name}}" class="btn btn-secondary btn-lg">Back</a>
+                <input type="submit" value="Next" class="btn btn-primary btn-lg">
+              </div>
+            
+            </form>
+              
+    
+
+                <div hidden>
+                    <!-- <div class="center-block"> -->
+                    <div class="row mt-5">
+                        <div class="col-12 col-md-6 offset-md-3 col-lg-4 offset-lg-4">
+    
+                            <h5 class="mb-0">1 Bed</h5>
+                            <small class="text-muted mt-0">If it's in use, gender segregation is always possible</small>
+                            <div class="input-group mt-1 mb-3 ">
+                                <div class="input-group-text">
+                                    <input class="form-check-input mt-0" type="checkbox" value="on" name="bed-1-use" {% if request.session.0.beds.1.active %} checked {% endif %} aria-label="Checkbox for following text input">
+                                </div>
+                                <!-- <span class="input-group-text" id="clip_los_min_span">Amount</span> -->
+                                <input id="bed_1_num" type="number" class="form-control text-center" name="bed_1_num" value="{{request.session.0.beds.1.num}}", min="0" max="1000" step="1", aria-describedby="">
+                            </div>
+    
+                            <h5 class="mb-0">2 Beds</h5>
+                            <small class="text-muted mt-0">It's ensured that Rooms with 2 beds can be always filled with same gender</small>
+                            <div class="input-group mt-1 mb-3 ">
+                                <div class="input-group-text">
+                                    <input class="form-check-input mt-0" type="checkbox" value="on" name="bed-2-use" {% if request.session.0.beds.2.active %} checked {% endif %} aria-label="Checkbox for following text input">
+                                </div>
+                                <!-- <span class="input-group-text" id="clip_los_min_span">Amount</span> -->
+                                <input id="bed_2_num" type="number" class="form-control text-center" name="bed_2_num" value="{{request.session.0.beds.2.num}}", min="0" max="1000" step="1", aria-describedby="">
+                            </div>
+        
+    
+    
+                        </div>
+                    </div>
+                </div>
+        
+
+    
+        </div>
+    </div>
+
+</div>
+
+
+
+{% endblock %}

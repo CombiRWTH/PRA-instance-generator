@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container-fluid main">
+  <div class="card main-card text-center">
+    <div class="card-body">
+
+        <h4 class="card-title mt-3 mb-0">Generation parameters of various other properties</h4>
+
+        <p class="card-text mt-0 text-muted">
+            The following properties are piecewise uniformly generated. For each age there is the rate of Uniform Distribution picked up by the polynomial function.<br>
+            For example, configure the constant 0 function for Emergency Rate would return only non Emergency patients, e.g. date of registration is at least one day before admission.
+        </p>
+
+        <!-- Top menu option -->
+        <ul class="nav nav-pills mb-3 flex-column flex-sm-row w-100 justify-content-between" id="pills-tab" role="tablist">
+            <li class="nav-item flex-grow-1" role="presentation">
+              <button class="nav-link active w-100" id="pills-default-tab" data-bs-toggle="pill" data-bs-target="#pills-default" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Default</button>
+            </li>
+            <li class="nav-item flex-grow-1" role="presentation">
+              <button class="nav-link w-100" id="pills-advanced-tab" data-bs-toggle="pill" data-bs-target="#pills-advanced" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Advanced</button>
+            </li>
+        </ul>
+
+        <form action="{% url 'confirm' %}" method="post">
+            {% csrf_token %}
+
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-default" role="tabpanel" aria-labelledby="pills-default-tab">
+                    <!-- Option 1: default Selection -->
+                    <div class="alert alert-info mt-4" role="alert">
+                        To obtain the polynomial functions, you can pass values for some age ranges.
+                        The program will then fit a polynomial function to these values.<br>
+                        Alternatively, you can use the advanced tab to configure the polynomial function directly.
+                    </div>
+
+                    <div class="row mt-3 justify-content-center">
+                        <div class="col-12 col-md-10 col-lg-8">
+                            <!-- Table for entering buckets -->
+                            <div class="table-responsive">
+                                <table class="table table-bordered text-center" style="width: 100%; min-width: 600px;">
+                                    <thead>
+                                        <tr>
+                                            <th>Age Range</th>
+                                            <th>Female Rate</th>
+                                            <th>Emergency Rate</th>
+                                            <th>Private Rate</th>
+                                            <th>Companion Rate</th>
+                                        </tr>
+                                        <tr>
+                                            <th></th>
+                                            <th>
+                                                <a href="{% url 'rateparams' %}?reset=rate_params,buckets,female&mode=default" role="button" class="btn btn-outline-secondary btn-sm w-100" type="button" id="reset-female-buckets">Reset</a>
+                                            </th>
+                                            <th>
+                                                <a href="{% url 'rateparams' %}?reset=rate_params,buckets,urgent&mode=default" role="button" class="btn btn-outline-secondary btn-sm w-100" type="button" id="reset-urgent-buckets">Reset</a>
+                                            </th>
+                                            <th>
+                                                <a href="{% url 'rateparams' %}?reset=rate_params,buckets,private&mode=default" role="button" class="btn btn-outline-secondary btn-sm w-100" type="button" id="reset-private-buckets">Reset</a>
+                                            </th>
+                                            <th>
+                                                <a href="{% url 'rateparams' %}?reset=rate_params,buckets,companion&mode=default" role="button" class="btn btn-outline-secondary btn-sm w-100" type="button" id="reset-companion-buckets">Reset</a>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>$18-30$</td>
+                                            <td><input id="female_rate_bucket_0" type="number" class="form-control text-center" name="female_rate_bucket_0" value="{{request.session.0.rate_params.buckets.female.0}}" min="0" max="1" step="0.0001"></td>
+                                            <td><input id="urgent_rate_bucket_0" type="number" class="form-control text-center" name="urgent_rate_bucket_0" value="{{request.session.0.rate_params.buckets.urgent.0}}" min="0" max="1" step="0.0001"></td>
+                                            <td><input id="private_rate_bucket_0" type="number" class="form-control text-center" name="private_rate_bucket_0" value="{{request.session.0.rate_params.buckets.private.0}}" min="0" max="1" step="0.0001"></td>
+                                            <td><input id="companion_rate_bucket_0" type="number" class="form-control text-center" name="companion_rate_bucket_0" value="{{request.session.0.rate_params.buckets.companion.0}}" min="0" max="1" step="0.0001"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>$30-40$</td>
+                                            <td><input id="female_rate_bucket_1" type="number" class="form-control text-center" name="female_rate_bucket_1" value="{{request.session.0.rate_params.buckets.female.1}}" min="0" max="1" step="0.0001"></td>
+                                            <td><input id="urgent_rate_bucket_1" type="number" class="form-control text-center" name="urgent_rate_bucket_1" value="{{request.session.0.rate_params.buckets.urgent.1}}" min="0" max="1" step="0.0001"></td>
+                                            <td><input id="private_rate_bucket_1" type="number" class="form-control text-center" name="private_rate_bucket_1" value="{{request.session.0.rate_params.buckets.private.1}}" min="0" max="1" step="0.0001"></td>
+                                            <td><input id="companion_rate_bucket_1" type="number" class="form-control text-center" name="companion_rate_bucket_1" value="{{request.session.0.rate_params.buckets.companion.1}}" min="0" max="1" step="0.0001"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>$40-50$</td>
+                                            <td><input id="female_rate_bucket_2" type="number" class="form-control text-center" name="female_rate_bucket_2" value="{{request.session.0.rate_params.buckets.female.2}}" min="0" max="1" step="0.0001"></td>
+                                            <td><input id="urgent_rate_bucket_2" type="number" class="form-control text-center" name="urgent_rate_bucket_2" value="{{request.session.0.rate_params.buckets.urgent.2}}" min="0" max="1" step="0.0001"></td>
+                                            <td><input id="private_rate_bucket_2" type="number" class="form-control text-center" name="private_rate_bucket_2" value="{{request.session.0.rate_params.buckets.private.2}}" min="0" max="1" step="0.0001"></td>
+                                            <td><input id="companion_rate_bucket_2" type="number" class="form-control text-center" name="companion_rate_bucket_2" value="{{request.session.0.rate_params.buckets.companion.2}}" min="0" max="1" step="0.0001"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>$50-60$</td>
+                                            <td><input id="female_rate_bucket_3" type="number" class="form-control text-center" name="female_rate_bucket_3" value="{{request.session.0.rate_params.buckets.female.3}}" min="0" max="1" step="0.0001"></td>
+                                            <td><input id="urgent_rate_bucket_3" type="number" class="form-control text-center" name="urgent_rate_bucket_3" value="{{request.session.0.rate_params.buckets.urgent.3}}" min="0" max="1" step="0.0001"></td>
+                                            <td><input id="private_rate_bucket_3" type="number" class="form-control text-center" name="private_rate_bucket_3" value="{{request.session.0.rate_params.buckets.private.3}}" min="0" max="1" step="0.0001"></td>
+                                            <td><input id="companion_rate_bucket_3" type="number" class="form-control text-center" name="companion_rate_bucket_3" value="{{request.session.0.rate_params.buckets.companion.3}}" min="0" max="1" step="0.0001"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>$60-70$</td>
+                                            <td><input id="female_rate_bucket_4" type="number" class="form-control text-center" name="female_rate_bucket_4" value="{{request.session.0.rate_params.buckets.female.4}}" min="0" max="1" step="0.0001"></td>
+                                            <td><input id="urgent_rate_bucket_4" type="number" class="form-control text-center" name="urgent_rate_bucket_4" value="{{request.session.0.rate_params.buckets.urgent.4}}" min="0" max="1" step="0.0001"></td>
+                                            <td><input id="private_rate_bucket_4" type="number" class="form-control text-center" name="private_rate_bucket_4" value="{{request.session.0.rate_params.buckets.private.4}}" min="0" max="1" step="0.0001"></td>
+                                            <td><input id="companion_rate_bucket_4" type="number" class="form-control text-center" name="companion_rate_bucket_4" value="{{request.session.0.rate_params.buckets.companion.4}}" min="0" max="1" step="0.0001"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>$70-80$</td>
+                                            <td><input id="female_rate_bucket_5" type="number" class="form-control text-center" name="female_rate_bucket_5" value="{{request.session.0.rate_params.buckets.female.5}}" min="0" max="1" step="0.0001"></td>
+                                            <td><input id="urgent_rate_bucket_5" type="number" class="form-control text-center" name="urgent_rate_bucket_5" value="{{request.session.0.rate_params.buckets.urgent.5}}" min="0" max="1" step="0.0001"></td>
+                                            <td><input id="private_rate_bucket_5" type="number" class="form-control text-center" name="private_rate_bucket_5" value="{{request.session.0.rate_params.buckets.private.5}}" min="0" max="1" step="0.0001"></td>
+                                            <td><input id="companion_rate_bucket_5" type="number" class="form-control text-center" name="companion_rate_bucket_5" value="{{request.session.0.rate_params.buckets.companion.5}}" min="0" max="1" step="0.0001"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>$80-90$</td>
+                                            <td><input id="female_rate_bucket_6" type="number" class="form-control text-center" name="female_rate_bucket_6" value="{{request.session.0.rate_params.buckets.female.6}}" min="0" max="1" step="0.0001"></td>
+                                            <td><input id="urgent_rate_bucket_6" type="number" class="form-control text-center" name="urgent_rate_bucket_6" value="{{request.session.0.rate_params.buckets.urgent.6}}" min="0" max="1" step="0.0001"></td>
+                                            <td><input id="private_rate_bucket_6" type="number" class="form-control text-center" name="private_rate_bucket_6" value="{{request.session.0.rate_params.buckets.private.6}}" min="0" max="1" step="0.0001"></td>
+                                            <td><input id="companion_rate_bucket_6" type="number" class="form-control text-center" name="companion_rate_bucket_6" value="{{request.session.0.rate_params.buckets.companion.6}}" min="0" max="1" step="0.0001"></td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End option 1 -->
+                </div>
+
+                <div class="tab-pane fade" id="pills-advanced" role="tabpanel" aria-labelledby="pills-advanced-tab">
+                    <!-- Option 2: Advanced Selection -->
+                    <div class="alert alert-info mt-4" role="alert">
+                        Pass the polynomial coefficients for the rate functions directly.
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <h5 class="mt-0 mb-0 text-start">Female rate</h5>
+                            <div class="mb-2 input-group">
+                                <input id="female_rate_3" type="number" class="form-control text-center" name="female_rate_3" value="{{request.session.0.rate_params.female.0}}", min="-1" max="1" step="0.0000000000000001" aria-describedby="clip_age_min_span">
+                                <span class="input-group-text" id="clip_age_min_span">$x^3 +$</span>
+                                <input id="female_rate_2" type="number" class="form-control text-center" name="female_rate_2" value="{{request.session.0.rate_params.female.1}}", min="-1" max="1" step="0.0000000000000001" aria-describedby="clip_age_min_span">
+                                <span class="input-group-text" id="clip_age_min_span">$x^2 +$</span>
+                                <input id="female_rate_1" type="number" class="form-control text-center" name="female_rate_1" value="{{request.session.0.rate_params.female.2}}", min="-1" max="1" step="0.0000000000000001" aria-describedby="clip_age_min_span">
+                                <span class="input-group-text" id="clip_age_min_span">$x^1 +$</span>
+                                <input id="female_rate_0" type="number" class="form-control text-center" name="female_rate_0" value="{{request.session.0.rate_params.female.3}}", min="-1" max="1" step="0.0000000000000001" aria-describedby="clip_age_min_span">
+                                <a href="{% url 'rateparams' %}?reset=rate_params,female&mode=advanced" role="button" class="btn btn-outline-secondary" type="button" id="load-default-rate-female">Reset</a>
+                            </div>
+                            <h5 class="mt-2 mb-0 text-start">Emergency Rate</h5>
+                            <div class="mb-2 input-group">
+                                <input id="urgent_rate_3" type="number" class="form-control text-center" name="urgent_rate_3" value="{{request.session.0.rate_params.urgent.0}}", min="-1" max="1" step="0.0000000000000001" aria-describedby="clip_age_min_span">
+                                <span class="input-group-text" id="clip_age_min_span">$x^3 +$</span>
+                                <input id="urgent_rate_2" type="number" class="form-control text-center" name="urgent_rate_2" value="{{request.session.0.rate_params.urgent.1}}", min="-1" max="1" step="0.0000000000000001" aria-describedby="clip_age_min_span">
+                                <span class="input-group-text" id="clip_age_min_span">$x^2 +$</span>
+                                <input id="urgent_rate_1" type="number" class="form-control text-center" name="urgent_rate_1" value="{{request.session.0.rate_params.urgent.2}}", min="-1" max="1" step="0.0000000000000001" aria-describedby="clip_age_min_span">
+                                <span class="input-group-text" id="clip_age_min_span">$x^1 +$</span>
+                                <input id="urgent_rate_0" type="number" class="form-control text-center" name="urgent_rate_0" value="{{request.session.0.rate_params.urgent.3}}", min="-1" max="1" step="0.0000000000000001" aria-describedby="clip_age_min_span">
+                                <a href="{% url 'rateparams' %}?reset=rate_params,urgent&mode=advanced" role="button" class="btn btn-outline-secondary" type="button" id="load-default-rate-urgent">Reset</a>
+                            </div>
+                            <h5 class="mt-2 mb-0 text-start">Private Rate</h5>
+                            <div class="mb-2 input-group">
+                                <input id="private_rate_3" type="number" class="form-control text-center" name="private_rate_3" value="{{request.session.0.rate_params.private.0}}", min="-1" max="1" step="0.0000000000000001" aria-describedby="clip_age_min_span">
+                                <span class="input-group-text" id="clip_age_min_span">$x^3 +$</span>
+                                <input id="private_rate_2" type="number" class="form-control text-center" name="private_rate_2" value="{{request.session.0.rate_params.private.1}}", min="-1" max="1" step="0.0000000000000001" aria-describedby="clip_age_min_span">
+                                <span class="input-group-text" id="clip_age_min_span">$x^2 +$</span>
+                                <input id="private_rate_1" type="number" class="form-control text-center" name="private_rate_1" value="{{request.session.0.rate_params.private.2}}", min="-1" max="1" step="0.0000000000000001" aria-describedby="clip_age_min_span">
+                                <span class="input-group-text" id="clip_age_min_span">$x^1 +$</span>
+                                <input id="private_rate_0" type="number" class="form-control text-center" name="private_rate_0" value="{{request.session.0.rate_params.private.3}}", min="-1" max="1" step="0.0000000000000001" aria-describedby="clip_age_min_span">
+                                <a href="{% url 'rateparams' %}?reset=rate_params,private&mode=advanced" role="button" class="btn btn-outline-secondary" type="button" id="load-default-rate-private">Reset</a>
+                            </div>
+                            <h5 class="mt-2 mb-0 text-start">Companion Rate</h5>
+                            <div class="mb-2 input-group">
+                                <input id="companion_rate_3" type="number" class="form-control text-center" name="companion_rate_3" value="{{request.session.0.rate_params.companion.0}}", min="-1" max="1" step="0.0000000000000001" aria-describedby="clip_age_min_span">
+                                <span class="input-group-text" id="clip_age_min_span">$x^3 +$</span>
+                                <input id="companion_rate_2" type="number" class="form-control text-center" name="companion_rate_2" value="{{request.session.0.rate_params.companion.1}}", min="-1" max="1" step="0.0000000000000001" aria-describedby="clip_age_min_span">
+                                <span class="input-group-text" id="clip_age_min_span">$x^2 +$</span>
+                                <input id="companion_rate_1" type="number" class="form-control text-center" name="companion_rate_1" value="{{request.session.0.rate_params.companion.2}}", min="-1" max="1" step="0.0000000000000001" aria-describedby="clip_age_min_span">
+                                <span class="input-group-text" id="clip_age_min_span">$x^1 +$</span>
+                                <input id="companion_rate_0" type="number" class="form-control text-center" name="companion_rate_0" value="{{request.session.0.rate_params.companion.3}}", min="-1" max="1" step="0.0000000000000001" aria-describedby="clip_age_min_span">
+                                <a href="{% url 'rateparams' %}?reset=rate_params,companion&mode=advanced" role="button" class="btn btn-outline-secondary" type="button" id="load-default-rate-companion">Reset</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- End Option 1 -->
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <h4 class="mb-0">Plot</h4>
+                {% if plot %}
+                    <img src="data:image/png;base64,{{ plot }}" alt="Matplotlib Graph" class="blog-image img-fluid">
+                {% else %}
+                    <p class="card-text mt-2 mb-3">No plot was generated. Please use the refresh button.</p>
+                {% endif %}
+            </div>
+      
+            <p class="card-text mt-2 mb-3">You can reload the plot by pressing the refresh button.</p>
+      
+
+            <!-- Hack to read out the active pill (assign value via JS) -->
+            <input type="hidden" id="current-param-mode" name="current_param_mode" value="{{request.session.0.rate_params.mode}}">
+              
+            <div>
+                <a href="{% url 'lor' %}" class="btn btn-secondary btn-lg">Back</a>
+                <input type="submit" value="Refresh" id="submit-reload" name="submit-reload" class="btn btn-secondary btn-lg">
+                <input type="submit" value="Next" class="btn btn-primary btn-lg">
+            </div>
+            
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+{% endblock %}

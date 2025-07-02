@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+
+<div class="container-fluid main">
+
+    <div class="card main-card text-center">
+        <div class="card-body">
+    
+            <form action="{% url 'rateparams' %}" method="post">
+                {% csrf_token %}
+                <h4 class="card-title mt-3">Length of Registration (LOR) Distribution</h4>
+        
+    
+                <p class="card-text mt-0 text-muted">
+                    You can choose between two options.
+                    Using a Lognormal Distribution or a Uniform Distribution of an interval.<br>
+                    Note: A value of at least 1 is required, because otherwise the patient would be declared as an emergency patient.
+                </p>
+
+                <!-- <div class="center-block"> -->
+                <div class="row mt-0">
+
+                    <!-- Clip the lor values -->
+                    <div class="mt-2 mb-4 col-12 col-md-6 offset-md-3 col-lg-4 offset-lg-4">
+                        <h5 class="mb-0">Clip the Value</h5>
+                        <small class="text-muted">You can clip the lor values of lognormal distribution here.</small>
+                        <div class="position-relative mb-3 mt-2">
+                            <div class="input-group">
+                                <span class="input-group-text" id="clip_lor_min_span">min</span>
+                                <input id="clip_lor_min" type="number" class="form-control text-center" name="clip_lor_min" value="{{request.session.0.clip.lor.min}}", min="1" max="100" step="1" aria-describedby="clip_lor_min_span">
+                                <span class="input-group-text ms-3" id="clip_lor_max_span">max</span>
+                                <input id="clip_lor_max" type="number" class="form-control text-center" name="clip_lor_max" value="{{request.session.0.clip.lor.max}}", min="1" max="100" step="1", aria-describedby="clip_lor_max_span">
+                            </div>
+                            <!-- Info button -->
+                            <button type="button" class="btn position-absolute top-50 translate-middle-y" style="right: -50px;"
+                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                title="A value of 0 corresponds to an emergency patient, which can be configured in the next step.">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-info-circle text-secondary" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="border border-secondary border-1 opacity-25" style="margin:1rem auto; display:block;" width="80%">
+                
+                <div class="row mt-0">
+                    <div class="mt-4 col-12 col-md-10 offset-md-1 col-lg-6 offset-lg-3">
+
+                        <!-- Uniform settings -->
+                        <h5 class="mb-0">Uniform Distribution</h5>
+                        <small class="text-muted mt-0">These values are in days.</small>
+                        <div class="position-relative mt-1 mb-3">
+                            <div class="input-group">
+                                <div class="input-group-text">
+                                    <input class="form-check-input radio-shared" id="lor_uniform_use" name="lor_uniform_use" type="radio" value="uniform" {% if request.session.0.lor.mode == 'uniform' %} checked {% endif %} aria-label="Radio button for following text input">
+                                </div>
+                                <span class="input-group-text" id="lor_uniform_min_span">min</span>
+                                <input id="lor_uniform_min" type="number" class="form-control text-center" name="lor_uniform_min" value="{{request.session.0.lor.uniform.min}}", min="1" max="100" step="1", aria-describedby="lor_uniform_min_span">
+                                <span class="input-group-text ms-3" id="lor_uniform_max_span">max</span>
+                                <input id="lor_uniform_max" type="number" class="form-control text-center" name="lor_uniform_max" value="{{request.session.0.lor.uniform.max}}", min="1" max="100" step="1" aria-describedby="lor_uniform_max_span">
+                            </div>
+                            <!-- Info button -->
+                            <button type="button" class="btn position-absolute top-50 translate-middle-y" style="right: -50px;"
+                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                    title="A value of 0 corresponds to an emergency patient, which can be configured in the next step.">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-info-circle text-secondary" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0"/>
+                                    </svg>
+                            </button>
+                        </div>
+
+                        <!-- Lognormal settings -->
+                        <h5 class="mb-0 mt-4">Lognormal Distribution</h5>
+                        <small class="text-muted mt-0">The generated values are in hours and will be divided by 24</small>
+                        <div class="input-group mt-1 mb-3">
+                            <div class="input-group-text">
+                                <input class="form-check-input radio-shared" id="lor_lognorm_use" name="lor_lognorm_use" type="radio" value="lognormal" {% if request.session.0.lor.mode == 'lognormal' %} checked {% endif %} aria-label="Radio button for following text input">
+                            </div>
+                            <span class="input-group-text" id="lor_mean_span">μ</span>
+                            <input id="lor_mean" type="number" class="form-control text-center" name="lor_mean" value="{{request.session.0.lor.lognormal.mean}}", min="0" max="10" step="0.0000000000000001" aria-describedby="lor_mean_span">
+                            <a href="{% url 'lor' %}?reset=lor,lognormal,mean" role="button" class="btn btn-outline-secondary" type="button" id="load-default-lor-mean">Reset</a>
+
+                            <span class="input-group-text ms-3" id="lor_std_span">σ</span>
+                            <input id="lor_std" type="number" class="form-control text-center" name="lor_std" value="{{request.session.0.lor.lognormal.std}}", min="0" max="5" step="0.0000000000000001" aria-describedby="lor_std_span">
+                            <a href="{% url 'lor' %}?reset=lor,lognormal,std" role="button" class="btn btn-outline-secondary" type="button" id="load-default-lor-std">Reset</a>
+                        </div>
+
+                    </div>
+
+                    <!-- Plot of uniform -->
+                    <div class="mt-4 col-12">
+                        <h4 class="mb-0">Plot Lognormal Distribution</h4>
+                        {% if plot %}
+                        <img src="data:image/png;base64,{{ plot }}" alt="Matplotlib Graph" class="blog-image img-fluid">
+                        {% else %}
+                        <p class="card-text mt-2 mb-3">No plot was generated. Please use the refresh button.</p>
+                        {% endif %}
+                    </div>
+                
+
+                </div>
+
+                <p class="card-text mt-4 mb-3">You can reload the plot by pressing the refresh button.</p>
+        
+                <div class="mt-3">
+                    {%if request.session.0.los.modus == 'dependent'%}
+                    <a href="{% url 'wardtyp' %}" class="btn btn-secondary btn-lg">Back</a>
+                    {% else %}
+                    <a href="{% url 'age' %}" class="btn btn-secondary btn-lg">Back</a>
+                    {% endif %}
+                    <input type="submit" value="Refresh" id="submit-reload" name="submit-reload" class="btn btn-secondary btn-lg">
+                    <input type="submit" value="Next" class="btn btn-primary btn-lg">
+                </div>
+                
+            </form>
+    
+        </div>
+    </div>
+
+</div>
+
+<!-- For activating the tooltip box -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+</script>
+
+
+
+{% endblock %}
