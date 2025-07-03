@@ -62,16 +62,16 @@
         <footer class="footer py-3 bg-light fixed-bottom">
           <div class="container-fluid text-center">
               <div class="input-group"> <!--dependent modus -->
-                  <a href="{% url 'rooms' %}"     role="button" class="btn btn-{% if request.path != '/rooms/' %}outline-{% endif %}dark">Beds</a>
+                  <a href="{% url 'rooms' %}"     role="button" class="btn btn-{% if request.path != '/rooms/' %}outline-{% endif %}dark">rooms</a>
                 {%if request.session.0.los.modus == 'dependent'%}
-                  <a href="{% url 'wardtyp' %}"   role="button" class="btn btn-{% if request.path != '/wardtyp/' %}outline-{% endif %}dark">Ward Typ</a>
+                  <a href="{% url 'wardtyp' %}"   role="button" class="btn btn-{% if request.path != '/wardtyp/' %}outline-{% endif %}dark">age&los</a>
                 {% else %} <!--independent modus -->
-                  <a href="{% url 'los' %}"   role="button" class="btn btn-{% if request.path != '/los/' %}outline-{% endif %}dark">LOS</a>
-                  <a href="{% url 'age' %}"   role="button" class="btn btn-{% if request.path != '/age/' %}outline-{% endif %}dark">Age</a>
+                  <a href="{% url 'los' %}"   role="button" class="btn btn-{% if request.path != '/los/' %}outline-{% endif %}dark">los</a>
+                  <a href="{% url 'age' %}"   role="button" class="btn btn-{% if request.path != '/age/' %}outline-{% endif %}dark">age</a>
                 {% endif %}
-                  <a href="{% url 'lor' %}"       role="button" class="btn btn-{% if request.path != '/lor/' %}outline-{% endif %}dark">LOR</a>
-                  <a href="{% url 'rateparams' %}"role="button" class="btn btn-{% if request.path != '/rateparams/' %}outline-{% endif %}dark">Rate Params</a>
-                  <a href="{% url 'confirm' %}"   role="button" class="btn btn-{% if request.path != '/confirm/' %}outline-{% endif %}dark">Confirm</a>
+                  <a href="{% url 'lor' %}"       role="button" class="btn btn-{% if request.path != '/lor/' %}outline-{% endif %}dark">lor</a>
+                  <a href="{% url 'rateparams' %}"role="button" class="btn btn-{% if request.path != '/rateparams/' %}outline-{% endif %}dark">other parameter</a>
+                  <a href="{% url 'confirm' %}"   role="button" class="btn btn-{% if request.path != '/confirm/' %}outline-{% endif %}dark">confirm</a>
               </div>
           </div>
       </footer>

@@ -30,8 +30,8 @@
 
 
                     <!-- Where to save the template -->
-                    <h5 class="mt-3 mb-0">Save Template</h5>
-                    <small class="text-muted mt-0">How should be the new template be named?</small>
+                    <h5 class="mt-3 mb-0">save template</h5>
+                    <small class="text-muted mt-0">How should the new template be named?</small>
                     <div class="input-group mt-1 mb-5">
                         <!-- <div class="input-group-text">
                             <input class="form-check-input mt-0" type="checkbox" value="True" name="bed-1-use" checked aria-label="Checkbox for following text input">
@@ -42,15 +42,15 @@
 
 
                     <!-- choose time horizon -->
-                    <h5 class="mb-0 mt-2">Time Horizon</h5>
-                    <small class="text-muted mt-0">How long should be the inspected period of time?</small>
+                    <h5 class="mb-0 mt-2">time horizon</h5>
+                    <small class="text-muted mt-0">How long should the inspected period of time be?</small>
                     <div class="input-group mt-1 mb-3">
                         <!-- <span class="input-group-text" id="clip_los_min_span">Amount</span> -->
                         <input id="time-horizon-input" type="number" class="form-control text-center" name="time-horizon-input" value="{{request.session.0.time_horizon}}", min="1" max="365" step="1", aria-describedby="">
                     </div>
 
                     <!-- select the target load factor -->
-                    <h5 class="mb-0">Load factor</h5>
+                    <h5 class="mb-0">load factor</h5>
                     <small class="text-muted mt-0">How high should the utilization be?</small>
                     <input type="range" class="form-range" name="range-load-factor" min="0.01" max="1" step="0.01" value="{{request.session.0.load_factor}}" id="range-load-factor" oninput="updateTextInput(this.value);">
                     <div class="input-group mt-1 mb-3 ">
@@ -59,7 +59,7 @@
 
 
                     <!-- Ensure feasibility w.r.t. gender separation -->
-                    <h5 class="mb-0">Feasibility</h5>
+                    <h5 class="mb-0">feasibility</h5>
                     <small class="text-muted mt-0">Should feasibility w.r.t. gender separation be ensured?</small>
                     <div class="input-group mt-1 mb-3">
                         <div class="form-check form-check-inline">
@@ -82,7 +82,7 @@
 
 
                     <!--Here can the two branches for los generation be chosen (los,age (in)dependent)-->
-                    <h5 class="mt-0 mb-0">LOS Modus</h5>
+                    <h5 class="mt-0 mb-0">length-of-stay (los) mode</h5>
                     <small class="text-muted mt-0">Should the los and age be generated independently?</small>
                     <div class="input-group mt-2 mb-3">
                         <div class="form-check form-check-inline">

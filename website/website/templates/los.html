@@ -8,17 +8,17 @@
 
         <form action="{% url 'age' %}" method="post">
             {% csrf_token %}
-            <h4 class="card-title mt-3 mb-0">Length of Stay (LOS) Distribution</h4>
+            <h4 class="card-title mt-3 mb-0">length of stay (los) probability distribution</h4>
             <small class="mt-0 text-muted">
-                You can choose an empirical distribution. Therefore select one of the schemas ploted below.<br>
-                Otherwise, you can use a self-configured uniform or fixed Lognormal distribution for the LOS.
+                You can either choose one of the plotted functions below, or<br>
+                a self-configured uniform or lognormal distribution.
             </small>
 
                         
             <!-- Clip the values -->
             <div class="row mt-2 mb-4">
                 <div class="mt-4 col-12 col-md-6 offset-md-3 col-lg-4 offset-lg-4">
-                    <h5 class="mb-0">Clip the Value</h5>
+                    <h5 class="mb-0">clip the value</h5>
                     <small class="text-muted mb-1">You can clip the los values (in days) here.</small>
                     <div class="mt-2 mb-3 input-group">
                         <span class="input-group-text" id="clip_los_min_span">min</span>
@@ -35,7 +35,7 @@
       
             <div class="dropdown mt-5 mb-2">
               <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                {% if request.session.0.los.pure_schema %} {{current}} {% else %} Select WardTyp {% endif %}
+                {% if request.session.0.los.pure_schema %} {{current}} {% else %} select type{% endif %}
               </button>
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="?selected=uniform">Uniform</a></li>
@@ -45,7 +45,7 @@
                 {% endfor %}
               </ul>
             </div>
-            <small class="mt-0 text-muted">Select a generation schema</small>
+            <small class="mt-0 text-muted">Select a probability distribution.</small>
 
             <!--Uniform option-->
             <div class="row mt-5">
@@ -55,7 +55,7 @@
                         <div class="border border-primary border-3 p-3">
                     {% endif %}
 
-                    <h5 class="mb-0">Uniform Distribution</h5>
+                    <h5 class="mb-0">uniform distribution</h5>
                         <small class="text-muted mt-0 mb-1">These values are in days.</small>
                         <div class="input-group mt-2 mb-3">
                             <span class="input-group-text" id="los_uniform_min_span">min</span>
@@ -78,7 +78,7 @@
                     <div class="border border-primary border-3 p-3">
                     {% endif %}
 
-                        <h5>Fixed Lognormal Distribution</h5>
+                        <h5>lognormal distribution</h5>
                         <small class="text-muted mt-0">The generated values are in hours and will be divided by 24</small>
                         <div class="input-group mt-1 mb-3">
                             <span class="input-group-text" id="los_mean_span">μ</span>
@@ -91,7 +91,7 @@
                         </div>
 
                         <div class="mt-4">
-                            <h4 class="mb-0">Plot Lognormal Distribution</h4>
+                            <h4 class="mb-0">plot lognormal distribution</h4>
                             {% if plot %}
                                 <img src="data:image/png;base64,{{ plot }}" alt="Matplotlib Graph" class="blog-image img-fluid">
                             {% else %}
@@ -125,7 +125,7 @@
             </div>
 
             
-            <p class="card-text mt-5 mb-3">You can reload the plot by pressing the refresh button.</p>
+            <p class="card-text mt-5 mb-3">You can reload the plot using the refresh button.</p>
               
             <div>
                 <a href="{% url 'rooms' %}" class="btn btn-secondary btn-lg">Back</a>

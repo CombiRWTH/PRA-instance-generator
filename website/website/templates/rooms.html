@@ -9,18 +9,18 @@
     <div class="card main-card text-center">
         <div class="card-body">
 
-            <h4 class="card-title mt-3 mb-0">How many rooms per size should be used?</h4>
+            <h4 class="card-title mt-3 mb-0">How many rooms per capacity should be generated?</h4>
             <p class="card-text mt-0 mb-4 text-muted">
-                You can mainly choose between the two options: Due Selection and Sequential <br>
+                You can choose between two options: duo and sequential <br>
             </p>
 
             <!-- Top menu option -->
             <ul class="nav nav-pills mb-3 flex-column flex-sm-row w-100 justify-content-between" id="pills-tab" role="tablist">
                 <li class="nav-item flex-grow-1" role="presentation">
-                  <button class="nav-link active w-100" id="pills-duo-tab" data-bs-toggle="pill" data-bs-target="#pills-duo" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Duo Selection</button>
+                  <button class="nav-link active w-100" id="pills-duo-tab" data-bs-toggle="pill" data-bs-target="#pills-duo" type="button" role="tab" aria-controls="pills-home" aria-selected="true">duo </button>
                 </li>
                 <li class="nav-item flex-grow-1" role="presentation">
-                  <button class="nav-link w-100" id="pills-seq-tab" data-bs-toggle="pill" data-bs-target="#pills-seq" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Sequential</button>
+                  <button class="nav-link w-100" id="pills-seq-tab" data-bs-toggle="pill" data-bs-target="#pills-seq" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">sequential</button>
                 </li>
             </ul>
 
@@ -30,9 +30,9 @@
                 <div class="tab-pane fade show active" id="pills-duo" role="tabpanel" aria-labelledby="pills-duo-tab">
                     <!-- Option 1: Duo Selection -->
                     <div class="alert alert-info mt-4" role="alert">
-                        You can choose rooms with two different bed amounts. <br>
-                        But the size $r_1$ of room type 1 must divide the size $r_2$ of room type 2. <br>
-                        Together they determine the minimal amount $n_1$ of rooms of type 1 by $n_1 = \frac{r_2}{r_1}-1$
+                        You can choose rooms with two different room capacities. <br>
+                        The capacity $r_1$ of room type 1 must divide the capacity $r_2$ of room type 2. <br>
+                        Together they determine the minimal number $n_1$ of rooms of type 1 by $n_1 = \frac{r_2}{r_1}-1$
                     </div>
 
                     <div class="row mt-5">
@@ -43,13 +43,13 @@
                                     <thead>
                                         <tr>
                                             <th></th>
-                                            <th>Size</th>
-                                            <th>Amount</th>
+                                            <th>capacity</th>
+                                            <th>number</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td class="text-start"><strong>Room Type 1</strong></td>
+                                            <td class="text-start"><strong>room type 1</strong></td>
                                             <td>
                                                 <input id="duo_bed_size_1" type="number" class="form-control text-center" name="duo_bed_size_1" value="{{request.session.0.rooms.duo.0.size}}" min="1" max="1000" step="1">
                                             </td>
@@ -58,7 +58,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td class="text-start"><strong>Room Type 2</strong></td>
+                                            <td class="text-start"><strong>room type 2</strong></td>
                                             <td>
                                                 <input id="duo_bed_size_2" type="number" class="form-control text-center" name="duo_bed_size_2" value="{{request.session.0.rooms.duo.1.size}}" min="0" max="1000" step="1">
                                             </td>
@@ -72,7 +72,7 @@
 
                             <!-- Pre-existing hidden error pane (room size)-->
                             <div id="error-pane-divide" class="alert alert-danger mt-3 d-none" role="alert">
-                                The size $r_1$ of Room Type 1 must divide the size $r_2$ of Room Type 2.
+                                The capacity $r_1$ of room type 1 must divide the capacity $r_2$ of room type 2.
                             </div>
 
 
@@ -83,9 +83,9 @@
                 <div class="tab-pane fade" id="pills-seq" role="tabpanel" aria-labelledby="pills-seq-tab">
                     <!-- Option 2: Sequential -->
                     <div class="alert alert-info mt-4" role="alert">
-                        The size of room 1 determines the sizes of all the other rooms. <br>
-                        Using the superincreasing option gives factors of powers of 2. <br>
-                        Otherwise, you can linear increasing sizes.
+                        The capacity of room type 1 determines the capacities of the other rooms. <br>
+                        Using the superincreasing option results in capacities that are powers of 2. <br>
+                        Otherwise, the capacity increases linearly.
                     </div>
 
 
@@ -94,7 +94,7 @@
 
                             <!-- Superincreasing switch -->
                             <div class="form-check form-switch d-flex align-items-center justify-content-center mb-3" style="gap: 4rem;">
-                                <label class="form-check-label fs-5 fw-bold" for="room-superincreasing">Superincreasing</label>
+                                <label class="form-check-label fs-5 fw-bold" for="room-superincreasing">superincreasing</label>
                                 <input 
                                     class="form-check-input form-check-input-lg"
                                     type="checkbox" role="switch"
@@ -113,14 +113,14 @@
                                     <thead>
                                         <tr>
                                             <th></th>
-                                            <th>Size</th>
-                                            <th>Amount</th>
+                                            <th>capacity</th>
+                                            <th>number</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {% for room in request.session.0.rooms.seq %}
                                         <tr>
-                                            <td class="text-start"><strong>Room Type {{ forloop.counter }}</strong></td>
+                                            <td class="text-start"><strong>room type {{ forloop.counter }}</strong></td>
                                             <td>
                                                 <input id="seq_bed_size_{{ forloop.counter }}"
                                                         name="seq_bed_size_{{ forloop.counter }}"
@@ -189,7 +189,7 @@
                             </div>
     
                             <h5 class="mb-0">2 Beds</h5>
-                            <small class="text-muted mt-0">It's ensured that Rooms with 2 beds can be always filled with same gender</small>
+                            <small class="text-muted mt-0">It's ensured that rooms with 2 beds can be always filled with same gender</small>
                             <div class="input-group mt-1 mb-3 ">
                                 <div class="input-group-text">
                                     <input class="form-check-input mt-0" type="checkbox" value="on" name="bed-2-use" {% if request.session.0.beds.2.active %} checked {% endif %} aria-label="Checkbox for following text input">

@@ -11,14 +11,13 @@
     
             <form action="{% url 'generate' %}" method="post">
                 {% csrf_token %}
-                <h4 class="card-title mt-3 mb-0">Confirm the generation by filling out last information</h4>
+                <h4 class="card-title mt-3 mb-0">Conclude the generation process</h4>
         
     
                 <p class="card-text mt-0 text-muted">
                     <!-- There are three allowed combinations. <br>
                     If at least one room with a single bed is used, the amount of rooms with two beds are arbitrary. <br>
                     But when no room with a single bed exists -->
-                    You have to adjust the load factor and how many instances you wish.<br>
                 </p>
 
                 <!-- <div class="center-block"> -->
@@ -26,14 +25,14 @@
                     <div class="col-12 col-md-6 offset-md-3 col-lg-4 offset-lg-4">
 
 
-                        <h5 class="mb-0">Amount</h5>
-                        <small class="text-muted mt-0">How many instances do you need of these settings?</small>
+                        <h5 class="mb-0">number of instances</h5>
+                        <small class="text-muted mt-0">How many instances of this setting do you want?</small>
                         <div class="input-group mt-1 mb-3">
                             <!-- <span class="input-group-text" id="clip_los_min_span">Amount</span> -->
                             <input id="amount-input" type="number" class="form-control text-center" name="amount-input" value="{{request.session.0.amount}}", min="1" max="50" step="1", aria-describedby="">
                         </div>
 
-                        <h5 class="mb-0">Save</h5>
+                        <h5 class="mb-0">save</h5>
                         <small class="text-muted mt-0">Where do you want to store the files?</small>
                         <div class="input-group mt-1 mb-3 ">
                             <!-- <div class="input-group-text">

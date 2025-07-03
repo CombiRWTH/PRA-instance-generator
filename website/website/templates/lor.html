@@ -11,13 +11,13 @@
     
             <form action="{% url 'rateparams' %}" method="post">
                 {% csrf_token %}
-                <h4 class="card-title mt-3">Length of Registration (LOR) Distribution</h4>
+                <h4 class="card-title mt-3">length of registration (lor) probability distribution</h4>
         
     
                 <p class="card-text mt-0 text-muted">
-                    You can choose between two options.
-                    Using a Lognormal Distribution or a Uniform Distribution of an interval.<br>
-                    Note: A value of at least 1 is required, because otherwise the patient would be declared as an emergency patient.
+                    You can choose between two options:
+                    a lognormal distribution or a uniform distribution.<br>
+                    Note: A value of at least 1 is required, because patients with lor of 0 are declared emergency patients. The rate of emergency patients can be specified in the next step.
                 </p>
 
                 <!-- <div class="center-block"> -->
@@ -25,8 +25,8 @@
 
                     <!-- Clip the lor values -->
                     <div class="mt-2 mb-4 col-12 col-md-6 offset-md-3 col-lg-4 offset-lg-4">
-                        <h5 class="mb-0">Clip the Value</h5>
-                        <small class="text-muted">You can clip the lor values of lognormal distribution here.</small>
+                        <h5 class="mb-0">clip the value</h5>
+                        <small class="text-muted">You can clip the lor values of the lognormal distribution here.</small>
                         <div class="position-relative mb-3 mt-2">
                             <div class="input-group">
                                 <span class="input-group-text" id="clip_lor_min_span">min</span>
@@ -53,7 +53,7 @@
                     <div class="mt-4 col-12 col-md-10 offset-md-1 col-lg-6 offset-lg-3">
 
                         <!-- Uniform settings -->
-                        <h5 class="mb-0">Uniform Distribution</h5>
+                        <h5 class="mb-0">uniform distribution</h5>
                         <small class="text-muted mt-0">These values are in days.</small>
                         <div class="position-relative mt-1 mb-3">
                             <div class="input-group">
@@ -77,8 +77,8 @@
                         </div>
 
                         <!-- Lognormal settings -->
-                        <h5 class="mb-0 mt-4">Lognormal Distribution</h5>
-                        <small class="text-muted mt-0">The generated values are in hours and will be divided by 24</small>
+                        <h5 class="mb-0 mt-4">lognormal distribution</h5>
+                        <small class="text-muted mt-0">The generated values are in hours and will be divided by 24.</small>
                         <div class="input-group mt-1 mb-3">
                             <div class="input-group-text">
                                 <input class="form-check-input radio-shared" id="lor_lognorm_use" name="lor_lognorm_use" type="radio" value="lognormal" {% if request.session.0.lor.mode == 'lognormal' %} checked {% endif %} aria-label="Radio button for following text input">
@@ -96,7 +96,7 @@
 
                     <!-- Plot of uniform -->
                     <div class="mt-4 col-12">
-                        <h4 class="mb-0">Plot Lognormal Distribution</h4>
+                        <h4 class="mb-0">plot of lognormal distribution</h4>
                         {% if plot %}
                         <img src="data:image/png;base64,{{ plot }}" alt="Matplotlib Graph" class="blog-image img-fluid">
                         {% else %}
@@ -107,7 +107,7 @@
 
                 </div>
 
-                <p class="card-text mt-4 mb-3">You can reload the plot by pressing the refresh button.</p>
+                <p class="card-text mt-4 mb-3">You can reload the plot using the refresh button.</p>
         
                 <div class="mt-3">
                     {%if request.session.0.los.modus == 'dependent'%}
