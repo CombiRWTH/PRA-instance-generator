@@ -11,5 +11,6 @@ Follow the steps:
 1. Create a virtual environment, for example using *venv*, by running `python3 -m venv .venv`. This creates a virtual environment in a *.venv* folder.
 1. Activate the virtual environment via `source .venv/bin/activate`. In case you want to leave the virtual environment after using the project, you can type in `deactivate`.
 1. Now, install all requirements (within the virtual environment): `pip install -r website/requirements.txt`
+2. If it is the first time, execute `python manage.py migrate` to ensure that the data base functions properly.
 1. Start the *Django* server by `python manage.py runserver`. This may take a while doing it the first time.
 1. You can now reach the *Instance Generator* through a browser by opening `http://127.0.0.1:8000/`.
