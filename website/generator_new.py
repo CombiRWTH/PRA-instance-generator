@@ -32,7 +32,7 @@ def main(template):
     # calculate and build some additional values
     template["rooms"] = get_room_infos(template["rooms"])
     # calc/estimate avg los (not exact, but good enough for the purpose)
-    avg_los = calc_avg_los(template, all_stats)
+    avg_los = min(calc_avg_los(template, all_stats),template["time_horizon"])
     template["pool_size"] = calcMaxAmountOfPatients(template["rooms"]["total"], avg_los, template["load_factor"],template["time_horizon"])
     template["path_total"] = create_path(template) #overriding the path with the right one
 
