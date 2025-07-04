@@ -1,5 +1,7 @@
 # Welcome to the Patient-to-Room Instance Generator
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15802374.svg)](https://doi.org/10.5281/zenodo.15802374)
+
 ## Installation
 The project is written in *Python* and uses a *Django* web server.
 This version of the instance generator currently does not work on Windows, and we recommend using a Mac or Linux operating system.
