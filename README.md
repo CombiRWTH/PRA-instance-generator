@@ -1,6 +1,6 @@
 # Welcome to the Patient-to-Room Instance Generator
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15802374.svg)](https://doi.org/10.5281/zenodo.15802374)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15802373.svg)](https://doi.org/10.5281/zenodo.15802373)
 
 ## Installation
 The project is written in *Python* and uses a *Django* web server.
